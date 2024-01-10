@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, push, get, remove } from "firebase/database";
 
-import { Configuration, OpenAIApi } from "openai";
+// import { Configuration, OpenAIApi } from "openai";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// const configuration = new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
-const openai = new OpenAIApi(configuration);
+// const openai = new OpenAIApi(configuration);
 
 const firebaseConfig = {
   apiKey: "AIzaSyB-g5BVN7b_jLgJlIagmFiGLeC_1m-Q5I0",
@@ -52,7 +52,18 @@ document.addEventListener("submit", (e) => {
   chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
 });
 
-function fetchReply() {
+async function fetchReply() {
+  const url =
+    "https://cute-duckanoo-fb3a76.netlify.app/.netlify/functions/fetchAI";
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "text/plain",
+    },
+    body: conversationArr,
+  });
+
   get(conversationInDb).then(async (snapshot) => {
     if (snapshot.exists()) {
       const conversationArr = Object.values(snapshot.val());
